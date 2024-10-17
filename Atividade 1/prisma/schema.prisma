@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String   @id @default(uuid()) @db.Uuid
+  name       String   @db.VarChar(150)
+  age        Int      @db.Integer
+  email      String   @unique @db.VarChar(150)
+  password   String   @db.VarChar(50)
+  linkGithub String   @db.VarChar(255) @map("link_github")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Product {
+  id              String   @id @default(uuid()) @db.Uuid
+  name            String   @db.VarChar(150)
+  description     String?
+  value           Decimal  @db.Decimal(10, 2)
+  quantityInStock Int      @map("quantity_in_stock")
+  type            String   @db.VarChar(50)
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("products")
+}
+
+model Store {
+  cnpj               String   @id @db.Char(14)
+  name               String   @db.VarChar(150)
+  segment            String?  @default("alimentação")
+  address            String   @db.VarChar(255)
+  phone              Int?
+  quantityOfBranches Int      @map("quantity_of_branches")
+  openingDateTime    DateTime @map("opening_date_time") @db.Timestamp()
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("stores")
+}
+
+model Supplier {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @db.VarChar(150)
+  email     String   @unique @db.VarChar(150)
+  rate      Int      @db.Integer
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("suppliers")
+}
