@@ -13,8 +13,9 @@ const port = process.env.PORT;
 app.get('/', (request: Request, response: Response) => {
 	response.status(200).json({
 		success: true,
-		message: 'Bem-vindo a Atividade 1',
+		message: 'Bem-vindo a Atividade 1'
 	});
+	return;
 });
 
 app.get(
