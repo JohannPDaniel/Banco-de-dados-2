@@ -18,37 +18,43 @@ model User {
   name       String   @db.VarChar(150)
   age        Int      @db.Integer
   email      String   @unique @db.VarChar(150)
-  password   String   @db.VarChar(50)
-  linkGithub String   @map("link_github") @db.VarChar(255)
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @default(now()) @updatedAt @map("updated_at")
+  password   String
+  linkGithub String?  @map("link_github") @db.VarChar(255)
+  createdAt  DateTime @default(now()) @map("created_at") @db.Date()
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Date()
 
   @@map("users")
 }
 
 model Product {
-  id              String   @id @default(uuid()) @db.Uuid
-  name            String   @db.VarChar(150)
-  description     String?
-  value           Decimal  @db.Decimal(10, 2)
-  quantityInStock Int      @map("quantity_in_stock")
-  type            String   @db.VarChar(50)
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @default(now()) @updatedAt @map("updated_at")
+  id          String    @id @default(uuid()) @db.Uuid
+  name        String    @db.VarChar(150)
+  description String
+  price       Decimal   @db.Money()
+  quantity    Int       @map("quantity_in_stock") @db.Integer
+  type        String    @db.VarChar(50)
+  available   Available
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at")
 
   @@map("products")
 }
 
+enum Available {
+  Yes
+  no
+}
+
 model Store {
-  cnpj               String   @id @db.Char(14)
-  name               String   @db.VarChar(150)
-  segment            String?  @default("alimentação")
-  address            String   @db.VarChar(255)
-  phone              Int?
-  quantityOfBranches Int      @map("quantity_of_branches")
-  openingDateTime    DateTime @map("opening_date_time") @db.Timestamp()
-  createdAt          DateTime @default(now()) @map("created_at")
-  updatedAt          DateTime @default(now()) @updatedAt @map("updated_at")
+  cnpj             String   @id @db.Char(14)
+  name             String   @db.VarChar(150)
+  segment          String?  @default("alimentação") @db.VarChar(50)
+  address          String
+  phone            String?
+  quantityBranches Int      @map("quantity_branches")
+  dateHourOpen     DateTime @map("date_Hour_Open") @db.Timestamp()
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @default(now()) @updatedAt @map("updated_at")
 
   @@map("stores")
 }
@@ -57,22 +63,10 @@ model Supplier {
   id        String   @id @default(uuid()) @db.Uuid
   name      String   @db.VarChar(150)
   email     String   @unique @db.VarChar(150)
-  rate      Rate     @default(Ten)
+  rating    Decimal  @db.Decimal()
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   @@map("suppliers")
 }
 
-enum Rate {
-  One
-  Two
-  Three
-  Four
-  Five
-  Six
-  Seven
-  Eight
-  Nine
-  Ten
-}

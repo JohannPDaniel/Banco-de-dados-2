@@ -1,5 +1,5 @@
+import { StudentController } from "../controllers/Student.controller";
 import { CreateStudentsMiddleware } from "../middlewares/createStudents.middleware";
-import { StudentController } from "../controllers/student.controller";
 import { Router } from 'express';
 
 export class StudentRoutes {
