@@ -27,14 +27,21 @@ model Crime {
   date        DateTime @db.Date
   criminalId  String   @map("criminal_id") @db.Uuid
   criminal    Criminal @relation(fields: [criminalId], references: [id])
-  Guns        Guns[]
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt   DateTime @default(now()) @updatedAt
+
+  Guns Gun[]
 
   @@map("crimes")
 }
 
-model Guns {
-  id       String @id @default(uuid()) @db.Uuid()
-  type     String @db.VarChar(50)
-  crimesId String @map("crimes_id") @db.Uuid
-  crime    Crime  @relation(fields: [crimesId], references: [id])
+model Gun {
+  id        String   @id @default(uuid()) @db.Uuid()
+  type      String   @db.VarChar(50)
+  crimesId  String   @map("crimes_id") @db.Uuid
+  crime     Crime    @relation(fields: [crimesId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map("guns")
 }
