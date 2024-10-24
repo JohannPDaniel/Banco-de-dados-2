@@ -8,27 +8,35 @@ datasource db {
 }
 
 model Criminal {
-  id           String   @id @default(uuid()) @db.Uuid()
-  name         String   @db.VarChar(50)
-  birthday     DateTime @db.Date
-  recidivist   Boolean  @db.Boolean()
-  cpf          String   @unique @db.Char(11)
-  registeredAt DateTime @db.Timestamp()
-  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamp()
-  updatedAt    DateTime @default(now()) @updatedAt
-  Crime        Crime[]
+  id             String   @id @default(uuid()) @db.Uuid()
+  name           String   @db.VarChar(50)
+  dateOfBirth    DateTime @map("date_of_birth") @db.Date
+  cpf            String   @unique @db.Char(11)
+  rg             String   @unique @db.Char(9)
+  criminalRecord String   @unique @map("criminal_record") @db.VarChar(50)
+  nationality    String   @db.VarChar(50)
+  gender         String?
+  address        String?
+  recidivist     Boolean  @db.Boolean
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at")
+  Crime          Crime[]
 
   @@map("criminals")
 }
 
 model Crime {
-  id          String   @id @default(uuid()) @db.Uuid()
-  description String   @db.Text
-  date        DateTime @db.Date
-  criminalId  String   @map("criminal_id") @db.Uuid
-  criminal    Criminal @relation(fields: [criminalId], references: [id])
-  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp()
-  updatedAt   DateTime @default(now()) @updatedAt
+  id               String        @id @default(uuid()) @db.Uuid()
+  status           StatusOffense @default(Aguardando_investigar)
+  dateOfOccurrence DateTime      @map("date_of_occurrence") @db.Timestamp()
+  caseNumber       Int           @unique @map("case_number") @db.Integer
+  priority         TypePriority  @default(baixa)
+  witnesses        String?       @db.Text
+  motivation       String?       @db.Text
+  criminalId       String        @map("criminal_id") @db.Uuid
+  criminal         Criminal      @relation(fields: [criminalId], references: [id])
+  createdAt        DateTime      @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt        DateTime      @default(now()) @updatedAt @map("updated_at")
 
   Guns Gun[]
 
@@ -36,12 +44,48 @@ model Crime {
 }
 
 model Gun {
-  id        String   @id @default(uuid()) @db.Uuid()
-  type      String   @db.VarChar(50)
-  crimesId  String   @map("crimes_id") @db.Uuid
-  crime     Crime    @relation(fields: [crimesId], references: [id])
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp()
-  updatedAt DateTime @default(now()) @updatedAt
+  id               String       @id @default(uuid()) @db.Uuid()
+  serialNumber     String       @unique @map("serial_number") @db.Char(12)
+  registrationCode String       @unique @map("registration_code") @db.Char(12)
+  type             TypeGun      @default(undefined)
+  caliber          TypeCaliber? @default(undefined)
+  state            TypeState    @default(in_possession)
+  crimesId         String       @map("crimes_id") @db.Uuid
+  crime            Crime        @relation(fields: [crimesId], references: [id])
+  createdAt        DateTime     @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt        DateTime     @default(now()) @updatedAt @map("updated_at")
 
   @@map("guns")
+}
+
+enum TypeGun {
+  firearm
+  bladed_weapon
+  improvised_weapons
+  undefined
+}
+
+enum TypeCaliber {
+  Ponto_22
+  Ponto_38
+  Nove_milimetros
+  undefined
+}
+
+enum TypeState {
+  in_possession
+  confiscated
+}
+
+enum TypePriority {
+  baixa
+  media
+  alta
+}
+
+enum StatusOffense {
+  Aguardando_investigar
+  Em_Andamento
+  Resolvido
+  Arquivado
 }

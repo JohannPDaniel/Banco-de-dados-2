@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
-import { prisma } from '../database/prisma.database';
-import { StudentService } from "../service/student.service";
-import { CreateStudentDto } from "../dtos";
+import { StudentService } from '../service/student.service';
+import { CreateStudentDto } from '../dtos';
 
 export class StudentController {
 	public static async create(req: Request, res: Response): Promise<void> {
@@ -25,8 +24,29 @@ export class StudentController {
 		} catch (error: any) {
 			res.status(500).json({
 				success: false,
-				message: `Erro no servidor: ${error.message}`
-			})
+				message: `Erro no servidor: ${error.message}`,
+			});
+		}
+	}
+
+	public static async findAll(req: Request, res: Response): Promise<void> {
+		try {
+			const { name, cpf } = req.query;
+
+			const service = new StudentService();
+			const result = await service.findAll({
+				name: name as string,
+				cpf: cpf as string,
+			});
+
+			const { code, ...response } = result;
+
+			res.status(code).json(response);
+		} catch (error: any) {
+			res.status(500).json({
+				success: false,
+				message: `Erro no servidor: ${error.message}`,
+			});
 		}
 	}
 }

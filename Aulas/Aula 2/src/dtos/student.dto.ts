@@ -17,3 +17,8 @@ export interface StudentDto {
 	age?: number | null;
 	cpf: string;
 }
+
+export interface QueryFilterDto {
+	name?: string;
+	cpf?: string;
+}
