@@ -9,12 +9,12 @@ datasource db {
 
 model Criminal {
   id             String   @id @default(uuid()) @db.Uuid()
-  name           String   @db.VarChar(50)
+  name           String   @db.VarChar(250)
   dateOfBirth    DateTime @map("date_of_birth") @db.Date
   cpf            String   @unique @db.Char(11)
   rg             String   @unique @db.Char(9)
-  criminalRecord String   @unique @map("criminal_record") @db.VarChar(50)
-  nationality    String   @db.VarChar(50)
+  criminalRecord String   @unique @map("criminal_record") @db.VarChar(100)
+  nationality    String   @db.VarChar(100)
   gender         String?
   address        String?
   recidivist     Boolean  @db.Boolean

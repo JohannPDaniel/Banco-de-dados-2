@@ -2,16 +2,10 @@ import { NextFunction, Request, Response } from 'express';
 
 export class createCriminalMiddleware {
 	public static validateRequired(
-		req: Request<
-			ParamsDictionary,
-			any,
-			any,
-			QueryString.ParsedQs,
-			Record<string, any>
-		>,
-		res: Response<any, Record<string, any>>,
+		req: Request,
+		res: Response,
 		next: NextFunction
-	) {
+	): void {
 		const {
 			name,
 			dateOfBirth,
@@ -23,61 +17,68 @@ export class createCriminalMiddleware {
 		} = req.body;
 
 		if (!name) {
-			return res.status(400).json({
+			res.status(400).json({
 				success: false,
 				message: 'Passe o nome por favor !!!',
 			});
+			return;
 		}
 
 		if (!dateOfBirth) {
-			return res.status(400).json({
+			res.status(400).json({
 				success: false,
 				message: 'Passe a data de nascimento por favor !!!',
 			});
+			return;
 		}
 
 		if (!cpf) {
-			return res.status(400).json({
+			res.status(400).json({
 				success: false,
 				message: 'Passe o cpf por favor !!!',
 			});
+			return;
 		}
 
 		if (!rg) {
-			return res.status(400).json({
+			res.status(400).json({
 				success: false,
 				message: 'Passe o rg por favor !!!',
 			});
+			return;
 		}
 
 		if (!criminalRecord) {
-			return res.status(400).json({
+			res.status(400).json({
 				success: false,
 				message: 'Passe o registro criminal por favor !!!',
 			});
+			return;
 		}
 
 		if (!nationality) {
-			return res.status(400).json({
+			res.status(400).json({
 				success: false,
 				message: 'Passe a nacionalidade por favor !!!',
 			});
+			return;
 		}
 
 		if (!recidivist) {
-			return res.status(400).json({
+			res.status(400).json({
 				success: false,
 				message: 'Passe a nacionalidade por favor !!!',
 			});
+			return;
 		}
 
-		return next();
+		next();
 	}
 	public static validateTypes(
 		req: Request,
-		res: Response<any, Record<string, any>>,
+		res: Response,
 		next: NextFunction
-	) {
+	): void {
 		const {
 			name,
 			dateOfBirth,
@@ -91,51 +92,57 @@ export class createCriminalMiddleware {
 		} = req.body;
 
 		if (typeof name !== 'string') {
-			return res.status(400).json({
+			res.status(400).json({
 				success: false,
 				message: 'O nome deve ser enviado em formato de texto !!!',
 			});
+			return;
 		}
 
 		if (typeof dateOfBirth !== 'string') {
-			return res.status(400).json({
+			res.status(400).json({
 				success: false,
 				message:
 					'A data de nascimento deve ser enviada em formato de texto !!!',
 			});
+			return;
 		}
 
 		if (typeof cpf !== 'string') {
-			return res.status(400).json({
+			res.status(400).json({
 				success: false,
 				message: 'O cpf deve ser enviado em formato de texto !!!',
 			});
+			return;
 		}
 
 		if (typeof rg !== 'string') {
-			return res.status(400).json({
+			res.status(400).json({
 				success: false,
 				message: 'O rg deve ser enviado em formato de texto !!!',
 			});
+			return;
 		}
 
 		if (typeof criminalRecord !== 'string') {
-			return res.status(400).json({
+			res.status(400).json({
 				success: false,
 				message: 'O registro criminal deve ser enviado em formato de texto !!!',
 			});
+			return;
 		}
 
 		if (typeof nationality !== 'string') {
-			return res.status(400).json({
+			res.status(400).json({
 				success: false,
 				message: 'O nacionalidade deve ser enviada em formato de texto !!!',
 			});
+			return;
 		}
 
 		if (gender) {
 			if (typeof gender !== 'string') {
-				return res.status(400).json({
+				res.status(400).json({
 					success: false,
 					message: 'O genero deve ser enviado em formato de texto !!!',
 				});
@@ -145,7 +152,7 @@ export class createCriminalMiddleware {
 
 		if (address) {
 			if (typeof address !== 'string') {
-				return res.status(400).json({
+				res.status(400).json({
 					success: false,
 					message: 'O endereço deve ser enviado em formato de texto !!!',
 				});
@@ -154,7 +161,7 @@ export class createCriminalMiddleware {
 		}
 
 		if (typeof recidivist !== 'string') {
-			return res.status(400).json({
+			res.status(400).json({
 				success: false,
 				message: 'Reincidente deve ser enviado em formato de texto !!!',
 			});
