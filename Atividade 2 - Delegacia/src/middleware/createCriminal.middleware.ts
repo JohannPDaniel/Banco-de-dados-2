@@ -64,16 +64,17 @@ export class createCriminalMiddleware {
 			return;
 		}
 
-		if (!recidivist) {
+		if (recidivist === undefined) {
 			res.status(400).json({
 				success: false,
-				message: 'Passe a nacionalidade por favor !!!',
+				message: 'Passe o reincidente por favor !!!',
 			});
 			return;
 		}
 
 		next();
 	}
+
 	public static validateTypes(
 		req: Request,
 		res: Response,
@@ -135,40 +136,38 @@ export class createCriminalMiddleware {
 		if (typeof nationality !== 'string') {
 			res.status(400).json({
 				success: false,
-				message: 'O nacionalidade deve ser enviada em formato de texto !!!',
+				message: 'A nacionalidade deve ser enviada em formato de texto !!!',
 			});
 			return;
 		}
 
-		if (gender) {
-			if (typeof gender !== 'string') {
-				res.status(400).json({
-					success: false,
-					message: 'O genero deve ser enviado em formato de texto !!!',
-				});
-			}
-			return;
-		}
-
-		if (address) {
-			if (typeof address !== 'string') {
-				res.status(400).json({
-					success: false,
-					message: 'O endereço deve ser enviado em formato de texto !!!',
-				});
-			}
-			return;
-		}
-
-		if (typeof recidivist !== 'string') {
+		if (gender && typeof gender !== 'string') {
 			res.status(400).json({
 				success: false,
-				message: 'Reincidente deve ser enviado em formato de texto !!!',
+				message: 'O genero deve ser enviado em formato de texto !!!',
 			});
+			return;
+		}
+
+		if (address && typeof address !== 'string') {
+			res.status(400).json({
+				success: false,
+				message: 'O endereço deve ser enviado em formato de texto !!!',
+			});
+			return;
+		}
+
+		if (typeof recidivist !== "boolean") {
+			res.status(400).json({
+				success: false,
+				message: 'Reincidente deve ser true ou false !!!',
+			});
+			return;
 		}
 
 		next();
 	}
+
 	public static validateData(
 		req: Request,
 		res: Response,
@@ -205,7 +204,7 @@ export class createCriminalMiddleware {
 			return;
 		}
 
-		if (cpf.length < 11 && cpf.length >= 12) {
+		if (cpf.length !== 11) {
 			res.status(400).json({
 				success: false,
 				message: 'O cpf precisa ter 11 caracteres !!!',
@@ -213,18 +212,18 @@ export class createCriminalMiddleware {
 			return;
 		}
 
-		if (rg.length < 9 && rg.length >= 10) {
+		if (rg.length !== 9) {
 			res.status(400).json({
 				success: false,
-				message: 'O cpf precisa ter 9 caracteres !!!',
+				message: 'O rg precisa ter 9 caracteres !!!',
 			});
 			return;
 		}
 
-		if (criminalRecord.length < 8 && criminalRecord.length >= 13) {
+		if (criminalRecord.length < 8 || criminalRecord.length > 12) {
 			res.status(400).json({
 				success: false,
-				message: 'O cpf precisa ter entre 8 a 12 caracteres !!!',
+				message: 'O registro criminal precisa ter entre 8 a 12 caracteres !!!',
 			});
 			return;
 		}
@@ -237,7 +236,7 @@ export class createCriminalMiddleware {
 			return;
 		}
 
-		if (gender.length < 5) {
+		if (gender && gender.length < 4) {
 			res.status(400).json({
 				success: false,
 				message: 'O genero precisa ter no minimo 5 caracteres !!!',
@@ -245,7 +244,7 @@ export class createCriminalMiddleware {
 			return;
 		}
 
-		if (address.length < 8) {
+		if (address && address.length < 8) {
 			res.status(400).json({
 				success: false,
 				message: 'O endereço precisa ter no minimo 8 caracteres !!!',
@@ -260,6 +259,7 @@ export class createCriminalMiddleware {
 			});
 			return;
 		}
+
 		next();
 	}
 }

@@ -19,14 +19,14 @@ export class CriminalController {
 
 			const data: CreateCriminalDto = {
 				name,
-				dateOfBirth,
+				dateOfBirth: new Date(`${dateOfBirth}T00:00:00.000Z`),
 				cpf,
 				rg,
 				criminalRecord,
 				nationality,
 				gender,
 				address,
-				recidivist
+				recidivist,
 			};
 			
 			const service = new CriminalService();

@@ -17,30 +17,32 @@ export class CriminalService {
 			recidivist,
 		} = createCriminal;
 
-		const criminal = await prisma.criminal.findFirst({
-			where: { cpf, rg, criminalRecord },
+		const existingCriminal = await prisma.criminal.findFirst({
+			where: {
+				OR: [{ cpf }, { rg }, { criminalRecord }],
+			},
 		});
-		
-		if (criminal) {
-			if (criminal.cpf) {
+
+		if (existingCriminal) {
+			if (existingCriminal.cpf === cpf) {
 				return {
-					success: true,
+					success: false,
 					code: 409,
 					message: 'CPF já está em uso, utilize outro !!!',
 				};
 			}
 
-			if (criminal.rg) {
+			if (existingCriminal.rg === rg) {
 				return {
-					success: true,
+					success: false,
 					code: 409,
 					message: 'RG já está em uso, utilize outro !!!',
 				};
 			}
 
-			if (criminal.criminalRecord) {
+			if (existingCriminal.criminalRecord === criminalRecord) {
 				return {
-					success: true,
+					success: false,
 					code: 409,
 					message: 'Registro criminal já está em uso, utilize outro !!!',
 				};

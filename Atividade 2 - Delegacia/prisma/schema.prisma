@@ -17,7 +17,7 @@ model Criminal {
   nationality    String   @db.VarChar(100)
   gender         String?
   address        String?
-  recidivist     Boolean  @db.Boolean
+  recidivist     Boolean  @default(false) @db.Boolean
   createdAt      DateTime @default(now()) @map("created_at") @db.Timestamp()
   updatedAt      DateTime @default(now()) @updatedAt @map("updated_at")
   Crime          Crime[]
