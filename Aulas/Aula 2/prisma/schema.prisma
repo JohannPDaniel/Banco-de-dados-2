@@ -31,7 +31,7 @@ model Assessment {
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp()
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
-  student Student @relation(fields: [studentId], references: [id])
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   @@map("assessments")
 }

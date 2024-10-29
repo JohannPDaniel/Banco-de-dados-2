@@ -1,3 +1,5 @@
+import { StatusOffense, TypePriority } from "@prisma/client";
+
 export interface CreateCriminalDto {
 	name: string;
 	dateOfBirth: Date;
@@ -21,4 +23,23 @@ export interface CriminalDto {
 	gender: string | null;
 	address: string | null;
 	recidivist: boolean;
+	crimes?: Array<Crimes>;
+}
+
+export interface Crimes {
+	status?: StatusOffense;
+}
+
+export interface updateCriminalDto {
+	name?: string;
+	dateOfBirth?: Date;
+	nationality?: string;
+	gender?: string | null;
+	address?: string | null;
+	recidivist?: boolean;
+}
+
+export interface QueryFilterDto {
+	name: string;
+	gender: string;
 }

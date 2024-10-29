@@ -1,6 +1,15 @@
 import { prisma } from '../database/prisma.database';
-import { Student, Student as StudentPrisma } from '@prisma/client';
-import { CreateStudentDto, QueryFilterDto, StudentDto } from '../dtos';
+import {
+	Student as StudentPrisma,
+	Assessment as AssessmentsPrisma,
+} from '@prisma/client';
+
+import {
+	CreateStudentDto,
+	QueryFilterDto,
+	StudentDto,
+	updateStudentDto,
+} from '../dtos';
 import { ResponseApi } from '../types';
 
 export class StudentService {
@@ -50,10 +59,13 @@ export class StudentService {
 	}
 
 	public async findAll(query: QueryFilterDto): Promise<ResponseApi> {
-		console.log(query);
+		const { name, cpf } = query;
 
 		const students = await prisma.student.findMany({
-			where: { name: query.name },
+			where: {
+				...(name && { name: { contains: name, mode: 'insensitive' } }),
+				...(cpf && { cpf: { contains: cpf } }),
+			},
 		});
 
 		return {
@@ -64,7 +76,86 @@ export class StudentService {
 		};
 	}
 
-	private mapToDto(student: StudentPrisma): StudentDto {
+	public async findOneById(id: string): Promise<ResponseApi> {
+		const student = await prisma.student.findUnique({
+			where: { id },
+			include: { assessments: true },
+		});
+
+		if (!student) {
+			return {
+				success: false,
+				code: 404,
+				message: 'Estudante não encontrado !!!',
+			};
+		}
+
+		return {
+			success: true,
+			code: 200,
+			message: 'Estudante encontrado!',
+			data: this.mapToDto(student),
+		};
+	}
+
+	public async update(id: string, updateStudentDto: updateStudentDto): Promise<ResponseApi> {
+		const student = await prisma.student.findUnique({
+			where: { id },
+		});
+
+		if (!student) {
+			return {
+				success: false,
+				code: 404,
+				message: 'Estudante não encontrado !',
+			};
+		}
+
+		const studentUpdated = await prisma.student.update({
+			where: { id },
+			data: { ...updateStudentDto },
+		});
+
+		return {
+			success: true,
+			code: 200,
+			message: 'Estudante atualizado com sucesso !',
+			data: this.mapToDto(studentUpdated),
+		};
+	}
+
+	public async remove(id: string): Promise<ResponseApi> {
+		const student = await prisma.student.findUnique({
+			where: { id },
+		});
+
+		// await prisma.assessment.deleteMany({
+		// 	where: { studentId: id },
+		// });
+
+		if (!student) {
+			return {
+				success: false,
+				code: 404,
+				message: 'Estudante não encontrado !',
+			};
+		}
+
+		const studentDeleted = await prisma.student.delete({
+			where: { id },
+		});
+
+		return {
+			success: true,
+			code: 200,
+			message: 'Estudante deletado com sucesso',
+			data: this.mapToDto(studentDeleted),
+		};
+	}
+
+	private mapToDto(
+		student: StudentPrisma & { assessments?: AssessmentsPrisma[] }
+	): StudentDto {
 		return {
 			id: student.id,
 			name: student.name,
@@ -72,6 +163,12 @@ export class StudentService {
 			email: student.email,
 			type: student.type,
 			age: student.age,
+			assessments: student.assessments?.map((assessment) => ({
+				id: assessment.id,
+				title: assessment.title,
+				grade: Number(assessment.grade),
+				description: assessment?.description,
+			})),
 		};
 	}
 }

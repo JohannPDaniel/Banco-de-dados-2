@@ -34,7 +34,7 @@ model Crime {
   witnesses        String?       @db.Text
   motivation       String?       @db.Text
   criminalId       String        @map("criminal_id") @db.Uuid
-  criminal         Criminal      @relation(fields: [criminalId], references: [id])
+  criminal         Criminal      @relation(fields: [criminalId], references: [id], onDelete: Cascade)
   createdAt        DateTime      @default(now()) @map("created_at") @db.Timestamp()
   updatedAt        DateTime      @default(now()) @updatedAt @map("updated_at")
 
@@ -51,7 +51,7 @@ model Gun {
   caliber          TypeCaliber? @default(undefined)
   state            TypeState    @default(in_possession)
   crimesId         String       @map("crimes_id") @db.Uuid
-  crime            Crime        @relation(fields: [crimesId], references: [id])
+  crime            Crime        @relation(fields: [crimesId], references: [id], onDelete: Cascade)
   createdAt        DateTime     @default(now()) @map("created_at") @db.Timestamp()
   updatedAt        DateTime     @default(now()) @updatedAt @map("updated_at")
 

@@ -16,6 +16,21 @@ export interface StudentDto {
 	type: StudentType;
 	age?: number | null;
 	cpf: string;
+	assessments?: Array<Assessments>;
+}
+
+export interface updateStudentDto {
+	name?: string;
+	password?: string;
+	type?: StudentType;
+	age?: number;
+}
+
+export interface Assessments {
+	id: string;
+	title: string;
+	description?: string | null;
+	grade: number;
 }
 
 export interface QueryFilterDto {

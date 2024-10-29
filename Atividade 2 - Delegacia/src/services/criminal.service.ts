@@ -1,7 +1,13 @@
 import { prisma } from '../database/prisma.database';
-import { CreateCriminalDto, CriminalDto } from '../dtos';
+import { Crime, Criminal as CriminalPrisma } from '@prisma/client';
+import {
+	CreateCriminalDto,
+	Crimes,
+	CriminalDto,
+	QueryFilterDto,
+	updateCriminalDto,
+} from '../dtos';
 import { ResponseApi } from '../types/response.types';
-import { Criminal as CriminalPrisma } from '@prisma/client';
 
 export class CriminalService {
 	public async create(createCriminal: CreateCriminalDto): Promise<ResponseApi> {
@@ -71,7 +77,103 @@ export class CriminalService {
 		};
 	}
 
-	private mapToDto(criminal: CriminalPrisma): CriminalDto {
+	public async findAll(query: QueryFilterDto): Promise<ResponseApi> {
+		const { name, gender } = query;
+
+		const criminals = await prisma.criminal.findMany({
+			where: {
+				...(name && { name: { contains: name, mode: 'insensitive' } }),
+				...(gender && { gender: { equals: gender, mode: 'insensitive' } }),
+			},
+		});
+
+		return {
+			success: true,
+			code: 200,
+			message: 'Criminosos buscados com sucesso !',
+			data: criminals.map((criminal) => this.mapToDto(criminal)),
+		};
+	}
+
+	public async findOneById(id: string): Promise<ResponseApi> {
+		const criminals = await prisma.criminal.findUnique({
+			where: { id },
+			include: { Crime: true },
+		});
+
+		if (!criminals) {
+			return {
+				success: false,
+				code: 404,
+				message: 'Criminoso não encontrado !',
+			};
+		}
+
+		return {
+			success: true,
+			code: 200,
+			message: 'Criminoso encontrado com sucesso !',
+			data: this.mapToDto(criminals),
+		};
+	}
+
+	public async update(
+		id: string,
+		updateCriminalDto: updateCriminalDto
+	): Promise<ResponseApi> {
+		const criminals = await prisma.criminal.findUnique({
+			where: { id },
+		});
+
+		if (!criminals) {
+			return {
+				success: false,
+				code: 404,
+				message: 'Criminoso não encontrado !',
+			};
+		}
+
+		const criminalUpdated = await prisma.criminal.update({
+			where: { id },
+			data: { ...updateCriminalDto },
+		});
+
+		return {
+			success: true,
+			code: 200,
+			message: 'Criminoso atualizado com sucesso !',
+			data: this.mapToDto(criminalUpdated),
+		};
+	}
+
+	public async remove(id: string): Promise<ResponseApi> {
+		const criminalId = await prisma.criminal.findUnique({
+			where: { id },
+		});
+
+		if (!criminalId) {
+			return {
+				success: false,
+				code: 404,
+				message: 'Identificador do criminoso não encontrado !',
+			};
+		}
+
+		const criminalDeleted = await prisma.criminal.delete({
+			where: { id },
+		});
+
+		return {
+			success: true,
+			code: 200,
+			message: 'Criminoso deletado com sucesso !',
+			data: this.mapToDto(criminalDeleted),
+		};
+	}
+	private mapToDto(
+		criminal: CriminalPrisma & { crimes?: Crime[] }
+	): CriminalDto {
+		
 		return {
 			id: criminal.id,
 			name: criminal.name,
@@ -83,6 +185,9 @@ export class CriminalService {
 			gender: criminal.gender,
 			address: criminal.address,
 			recidivist: criminal.recidivist,
+			crimes: criminal.crimes?.map((crime) => ({
+				status: crime?.status
+			}))
 		};
 	}
 }
