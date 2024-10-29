@@ -29,7 +29,7 @@ model Crime {
   id               String        @id @default(uuid()) @db.Uuid()
   status           StatusOffense @default(Aguardando_investigar)
   dateOfOccurrence DateTime      @map("date_of_occurrence") @db.Timestamp()
-  caseNumber       Int           @unique @map("case_number") @db.Integer
+  caseNumber       String        @unique @map("case_number") @db.Char(12)
   priority         TypePriority  @default(baixa)
   witnesses        String?       @db.Text
   motivation       String?       @db.Text

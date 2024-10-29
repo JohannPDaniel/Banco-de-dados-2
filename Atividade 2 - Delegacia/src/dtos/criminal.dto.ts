@@ -28,6 +28,10 @@ export interface CriminalDto {
 
 export interface Crimes {
 	status?: StatusOffense;
+	dateOfOccurrence: Date;
+	priority: TypePriority;
+	witnesses: string | null;
+	motivation: string | null;
 }
 
 export interface updateCriminalDto {

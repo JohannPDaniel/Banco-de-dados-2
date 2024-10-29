@@ -1,5 +1,8 @@
 import { prisma } from '../database/prisma.database';
-import { Crime, Criminal as CriminalPrisma } from '@prisma/client';
+import {
+	Crime as CrimePrisma,
+	Criminal as CriminalPrisma,
+} from '@prisma/client';
 import {
 	CreateCriminalDto,
 	Crimes,
@@ -171,9 +174,8 @@ export class CriminalService {
 		};
 	}
 	private mapToDto(
-		criminal: CriminalPrisma & { crimes?: Crime[] }
+		criminal: CriminalPrisma & { Crime?: CrimePrisma[] }
 	): CriminalDto {
-		
 		return {
 			id: criminal.id,
 			name: criminal.name,
@@ -185,9 +187,13 @@ export class CriminalService {
 			gender: criminal.gender,
 			address: criminal.address,
 			recidivist: criminal.recidivist,
-			crimes: criminal.crimes?.map((crime) => ({
-				status: crime?.status
-			}))
+			crimes: criminal.Crime?.map((crime) => ({
+				status: crime.status,
+				dateOfOccurrence: crime.dateOfOccurrence,
+				priority: crime.priority,
+				motivation: crime.motivation,
+				witnesses: crime.witnesses,
+			})),
 		};
 	}
 }

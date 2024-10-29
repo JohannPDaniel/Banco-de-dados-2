@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { createCriminalMiddleware } from '../middleware/createCriminal.middleware';
+import { createCriminalMiddleware } from '../middleware/criminal/createCriminal.middleware';
 import { CriminalController } from '../controllers/criminal.controller';
-import { FindAllCriminalMiddleware } from '../middleware/find-all-criminal.middleware';
+import { FindAllCriminalMiddleware } from '../middleware/criminal/find-all-criminal.middleware';
 import { ValidateUuidMiddleware } from '../middleware/validate-uuid.middleware';
-import { UpdateCriminalMiddleware } from '../middleware/update-criminal.middleware';
+import { UpdateCriminalMiddleware } from '../middleware/criminal/update-criminal.middleware';
 
 export class CriminalRoutes {
 	public static execute(): Router {
