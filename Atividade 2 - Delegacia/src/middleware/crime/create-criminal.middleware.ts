@@ -158,15 +158,15 @@ export class CreateCrimeMiddleware {
 		const datePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
 
 		if (
-			StatusOffense.Aguardando_investigar &&
-			StatusOffense.Em_Andamento &&
-			StatusOffense.Resolvido &&
-			StatusOffense.Arquivado
+			status !== StatusOffense.Aguardando_investigar &&
+			status !== StatusOffense.Em_Andamento &&
+			status !== StatusOffense.Resolvido &&
+			status !== StatusOffense.Arquivado
 		) {
 			res.status(400).json({
 				success: false,
 				message:
-					'O status da investigação deve ser "Aguardando_investigar", "Em_Andamento", "Resolvido" ou "Arquivado"',
+					'O status da investigação deve ser "Aguardando_investigar" ou "Em_Andamento" ou "Resolvido" ou "Arquivado"',
 			});
 			return;
 		}

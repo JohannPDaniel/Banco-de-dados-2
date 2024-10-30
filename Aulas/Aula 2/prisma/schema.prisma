@@ -15,6 +15,7 @@ model Student {
   type        StudentType  @default(M)
   age         Int?         @db.Integer
   cpf         String       @db.Char(11)
+  authToken   String?      @map("auth_token") @db.Text
   createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamp()
   updatedAt   DateTime     @default(now()) @updatedAt @map("updated_at")
   assessments Assessment[]

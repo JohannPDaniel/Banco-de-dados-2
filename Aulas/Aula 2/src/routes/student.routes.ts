@@ -1,9 +1,10 @@
-import { CreateStudentsMiddleware } from '../middlewares/createStudents.middleware';
+import { CreateStudentsMiddleware } from '../middlewares/students/createStudents.middleware';
 import { Router } from 'express';
-import { FindAllStudentMiddleware } from '../middlewares/find-all-student.middleware';
+import { FindAllStudentMiddleware } from '../middlewares/students/find-all-student.middleware';
 import { StudentController } from '../controllers/student.controller';
 import { ValidateUuidMiddleware } from '../middlewares/validate-uuid.middleware';
-import { UpdateStudentMiddleware } from '../middlewares/update-students.middleware';
+import { UpdateStudentMiddleware } from '../middlewares/students/update-students.middleware';
+import { AuthMiddleware } from '../middlewares/auth/auth.middleware';
 
 export class StudentRoutes {
 	public static execute(): Router {
@@ -20,7 +21,7 @@ export class StudentRoutes {
 
 		router.get(
 			'/students',
-			[FindAllStudentMiddleware.validateTypes],
+			[AuthMiddleware.validate, FindAllStudentMiddleware.validateTypes],
 			StudentController.findAll
 		);
 

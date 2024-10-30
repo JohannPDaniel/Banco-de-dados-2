@@ -32,6 +32,9 @@ export class StudentController {
 	public static async findAll(req: Request, res: Response): Promise<void> {
 		try {
 			const { name, cpf } = req.query;
+			const { student } = req.body;
+
+			console.log('Student no controller:', student);
 
 			const service = new StudentService();
 			const result = await service.findAll({
@@ -94,9 +97,9 @@ export class StudentController {
 			const service = new StudentService();
 			const result = await service.remove(id);
 
-			const {code, ...response} = result
+			const { code, ...response } = result;
 
-			res.status(code).json(response)
+			res.status(code).json(response);
 		} catch (error: any) {
 			res.status(500).json({
 				success: false,

@@ -11,6 +11,7 @@ import {
 	updateStudentDto,
 } from '../dtos';
 import { ResponseApi } from '../types';
+import { Bcrypt } from "../utils/bcript";
 
 export class StudentService {
 	public async create(createStudent: CreateStudentDto): Promise<ResponseApi> {
@@ -40,11 +41,14 @@ export class StudentService {
 			}
 		}
 
+		const bcrypt = new Bcrypt()
+		const passwordHash = await bcrypt.generateHash(password)
+
 		const studentsCreated = await prisma.student.create({
 			data: {
 				name,
 				email,
-				password,
+				password: passwordHash,
 				age,
 				cpf,
 			},
