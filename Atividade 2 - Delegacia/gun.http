@@ -1,0 +1,11 @@
+POST http://localhost:6120/guns HTTP/1.1
+Content-Type: application/json
+###
+GET http://localhost:6120/guns? HTTP/1.1
+###
+GET http://localhost:6120/guns/bf3e12e3-1ea4-4d48-8041-fa2e81e6294e HTTP/1.1
+###
+PUT http://localhost:6120/guns/bf3e12e3-1ea4-4d48-8041-fa2e81e6294e HTTP/1.1
+Content-Type: application/json
+###
+DELETE http://localhost:6120/guns/7fa74054-1b74-4fd7-b62e-59dfdce4421c HTTP/1.1

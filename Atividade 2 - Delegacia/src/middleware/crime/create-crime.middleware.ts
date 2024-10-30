@@ -1,21 +1,15 @@
 import { StatusOffense, TypePriority } from '@prisma/client';
 import { NextFunction, Request, Response } from 'express';
+import { ValidateUuidMiddleware } from '../validate-uuid.middleware';
 
 export class CreateCrimeMiddleware {
-	public validateRequire(
+	public static validateRequire(
 		req: Request,
 		res: Response,
 		next: NextFunction
 	): void {
-		const {
-			status,
-			dateOfOccurrence,
-			caseNumber,
-			priority,
-			witnesses,
-			motivation,
-			criminalId,
-		} = req.body;
+		const { status, dateOfOccurrence, caseNumber, priority, criminalId } =
+			req.body;
 
 		if (!status) {
 			res.status(400).json({
@@ -49,22 +43,6 @@ export class CreateCrimeMiddleware {
 			return;
 		}
 
-		if (!witnesses) {
-			res.status(400).json({
-				success: false,
-				message: 'Passe as testemunhas do crime, por favor !!!',
-			});
-			return;
-		}
-
-		if (!motivation) {
-			res.status(400).json({
-				success: false,
-				message: 'Passe a motivação do crime, por favor !!!',
-			});
-			return;
-		}
-
 		if (!criminalId) {
 			res.status(400).json({
 				success: false,
@@ -75,7 +53,11 @@ export class CreateCrimeMiddleware {
 
 		next();
 	}
-	public validateType(req: Request, res: Response, next: NextFunction): void {
+	public static validateType(
+		req: Request,
+		res: Response,
+		next: NextFunction
+	): void {
 		const {
 			status,
 			dateOfOccurrence,
@@ -118,7 +100,7 @@ export class CreateCrimeMiddleware {
 			return;
 		}
 
-		if (typeof witnesses !== 'string') {
+		if (witnesses && typeof witnesses !== 'string') {
 			res.status(400).json({
 				success: false,
 				message: 'O atributo "testemunha" deve ser em formato de texto !!!',
@@ -126,7 +108,7 @@ export class CreateCrimeMiddleware {
 			return;
 		}
 
-		if (typeof motivation !== 'string') {
+		if (motivation && typeof motivation !== 'string') {
 			res.status(400).json({
 				success: false,
 				message: 'O atributo "motivação" deve ser em formato de texto !!!',
@@ -144,7 +126,11 @@ export class CreateCrimeMiddleware {
 
 		next();
 	}
-	public validateData(req: Request, res: Response, next: NextFunction): void {
+	public static validateData(
+		req: Request,
+		res: Response,
+		next: NextFunction
+	): void {
 		const {
 			status,
 			dateOfOccurrence,
@@ -155,7 +141,9 @@ export class CreateCrimeMiddleware {
 			criminalId,
 		} = req.body;
 
-		const datePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
+		const datePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|)$/;
+		const uuidRegex =
+			/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
 
 		if (
 			status !== StatusOffense.Aguardando_investigar &&
@@ -166,7 +154,7 @@ export class CreateCrimeMiddleware {
 			res.status(400).json({
 				success: false,
 				message:
-					'O status da investigação deve ser "Aguardando_investigar" ou "Em_Andamento" ou "Resolvido" ou "Arquivado"',
+					'O atributo status da investigação deve ser "Aguardando_investigar" ou "Em_Andamento" ou "Resolvido" ou "Arquivado"',
 			});
 			return;
 		}
@@ -175,7 +163,54 @@ export class CreateCrimeMiddleware {
 			res.status(400).json({
 				success: false,
 				message:
-					'A data da ocorrência deve estar em formato de data com YYYY-MM-DDT00:00:00Z',
+					'O atributo data da ocorrência deve estar em formato de data com YYYY-MM-DDT00:00:00Z',
+			});
+			return;
+		}
+
+		if (caseNumber.length < 6 || caseNumber.length >= 13) {
+			res.status(400).json({
+				success: false,
+				message:
+					'O atributo número de caso deve conter entre 6 e 12 caracteres !!!',
+			});
+			return;
+		}
+
+		if (
+			priority !== TypePriority.baixa &&
+			priority !== TypePriority.media &&
+			priority !== TypePriority.alta
+		) {
+			res.status(400).json({
+				success: false,
+				message:
+					'O atributo prioridade deve ser "baixa" ou "media" ou "alta" !!!',
+			});
+			return;
+		}
+
+		if (witnesses && witnesses.length < 5) {
+			res.status(400).json({
+				success: false,
+				message: 'O atributo testemunha deve ter no minimo 5 caracteres !!!',
+			});
+			return;
+		}
+
+		if (motivation && motivation.length < 5) {
+			res.status(400).json({
+				success: false,
+				message: 'O atributo motivação deve ter no minimo 5 caracteres !!!',
+			});
+			return;
+		}
+
+		if (!uuidRegex.test(criminalId)) {
+			res.status(400).json({
+				success: false,
+				message:
+					'O atributo criminalId que é a Foreign Key precisa ser um UUID !!!',
 			});
 			return;
 		}

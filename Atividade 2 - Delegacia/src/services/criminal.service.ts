@@ -1,15 +1,9 @@
 import { prisma } from '../database/prisma.database';
 import {
-	Crime as CrimePrisma,
 	Criminal as CriminalPrisma,
+	Crime as CrimePrisma,
 } from '@prisma/client';
-import {
-	CreateCriminalDto,
-	Crimes,
-	CriminalDto,
-	QueryFilterDto,
-	updateCriminalDto,
-} from '../dtos';
+import { CreateCriminalDto, QueryFilterDto, CriminalDto, updateCriminalDto } from '../dtos';
 import { ResponseApi } from '../types/response.types';
 
 export class CriminalService {

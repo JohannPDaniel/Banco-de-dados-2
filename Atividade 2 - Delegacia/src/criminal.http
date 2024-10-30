@@ -13,3 +13,17 @@ Content-Type: application/json
     "gender": "male",
     "recidivist": true
 }
+###
+GET http://localhost:6120/criminals?name&gender HTTP/1.1
+###
+GET http://localhost:6120/criminals/a7227d49-566a-4dc0-9455-bce8f1125bc2 HTTP/1.1
+###
+PUT http://localhost:6120/criminals/441cebb8-05c3-4a5f-9704-40454d6bc311 HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Matheus",
+    "address": "Rua das Colves, 71"
+}
+###
+DELETE http://localhost:6120/criminals/441cebb8-05c3-4a5f-9704-40454d6bc311 HTTP/1.1
