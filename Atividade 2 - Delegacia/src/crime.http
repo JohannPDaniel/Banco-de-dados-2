@@ -6,8 +6,17 @@ Content-Type: application/json
     "dateOfOccurrence": "2005-05-12T08:05:25Z",
     "caseNumber": "24587456885",
     "priority": "baixa",
-    "criminalId": "a7227d49-566a-4dc0-9455-bce8f1125bc2"
+    "criminalId": "c7e55ac9-1e84-42d9-a108-03e5173a7cc4"
 }
+
+HTTP/1.1 201  - Created
+x-powered-by: Express
+access-control-allow-origin: *
+content-type: application/json; charset=utf-8
+content-length: 323
+etag: W/"143-byPc4aTO7yBlydEFtyHoH2Uadvg"
+date: Thu, 31 Oct 2024 20:38:56 GMT
+connection: close
 ###
 GET http://localhost:6120/crimes?caseNumber HTTP/1.1
 ###

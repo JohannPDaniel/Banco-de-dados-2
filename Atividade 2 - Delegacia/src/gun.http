@@ -1,0 +1,32 @@
+POST http://localhost:6120/guns HTTP/1.1
+Content-Type: application/json
+
+{
+    "serialNumber": "02587599",
+	"registrationCode": "052874569",
+	"crimesId": "b48bc094-4e7a-4475-b2b8-72c28b8fd860"
+}
+###
+GET http://localhost:6120/guns?type&caliber&state HTTP/1.1
+
+###
+GET http://localhost:6120/guns/868cf675-92ee-4bfb-a63a-91e4980573e8 HTTP/1.1
+###
+PUT http://localhost:6120/guns/868cf675-92ee-4bfb-a63a-91e4980573e8 HTTP/1.1
+Content-Type: application/json
+
+{
+    "type": "firearm",
+    "caliber": "Nove_milimetros",
+    "state": "in_possession"
+}
+
+
+HTTP/1.1 200  - OK
+x-powered-by: Express
+access-control-allow-origin: *
+content-type: application/json; charset=utf-8
+content-length: 294
+etag: W/"126-91hZyyiGR8BUJtX8+jJeLXPfkoI"
+date: Thu, 31 Oct 2024 22:40:53 GMT
+connection: close

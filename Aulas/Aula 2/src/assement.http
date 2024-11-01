@@ -1,0 +1,17 @@
+POST http://localhost:3030/assessments HTTP/1.1
+Content-Type: application/json
+
+{
+    "title": "Titulo 1",
+    "grade": 8.5,
+    "studentId": "95f0bb58-3a60-488e-b7d0-f4e084dd8781"
+}
+
+HTTP/1.1 201  - Created
+x-powered-by: Express
+access-control-allow-origin: *
+content-type: application/json; charset=utf-8
+content-length: 295
+etag: W/"127-ntIEOmHd811gBK5lN7+AvbW6lBs"
+date: Wed, 30 Oct 2024 23:13:33 GMT
+connection: close

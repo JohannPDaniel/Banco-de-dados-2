@@ -31,9 +31,9 @@ export interface CrimeDto {
 interface Gun {
 	serialNumber: string;
 	registrationCode: string;
-	type: TypeGun;
+	type?: TypeGun | null;
 	caliber?: TypeCaliber | null;
-	state: TypeState;
+	state?: TypeState | null;
 }
 
 export interface UpdateCrimeDto {

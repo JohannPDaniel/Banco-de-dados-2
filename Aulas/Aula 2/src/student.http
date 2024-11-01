@@ -1,0 +1,53 @@
+GET http://localhost:3030 HTTP/1.1
+###
+POST http://localhost:3030/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "email": "maria@jpd.com",
+    "password": "maria123"
+}
+###
+POST http://localhost:3030/students HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Pedro",
+    "email": "pedro@jpd.com",
+    "password": "pedro123",
+    "type": "M",
+    "cpf": "74525745820"
+}
+
+HTTP/1.1 201  - Created
+x-powered-by: Express
+access-control-allow-origin: *
+content-type: application/json; charset=utf-8
+content-length: 197
+etag: W/"c5-gxsWUW4pYLQkKHwvJgrZARtwzbs"
+date: Wed, 30 Oct 2024 23:12:03 GMT
+connection: close
+###
+GET http://localhost:3030/students HTTP/1.1
+Authorization: 7ff8e7a4-be26-4d57-8709-bd9282e75355
+
+HTTP/1.1 200  - OK
+x-powered-by: Express
+access-control-allow-origin: *
+content-type: application/json; charset=utf-8
+content-length: 327
+etag: W/"147-PSKlfzsdKteflArsKD4bDPR0h7Y"
+date: Wed, 30 Oct 2024 01:51:22 GMT
+connection: close
+###
+GET http://localhost:3030/students/ad45431a-8627-4c4d-b506-3336b34ba2b0 HTTP/1.1
+###
+PUT http://localhost:3030/students/ad45431a-8627-4c4d-b506-3336b34ba2b0 HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Maria Silva",
+    "age": 18
+}
+###
+DELETE http://localhost:3030/students/2a00eae9-2a37-499b-b463-ad816689775e HTTP/1.1
