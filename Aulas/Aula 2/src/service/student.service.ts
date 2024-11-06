@@ -11,7 +11,7 @@ import {
 	updateStudentDto,
 } from '../dtos';
 import { ResponseApi } from '../types';
-import { Bcrypt } from "../utils/bcript";
+import { Bcrypt } from '../utils/bcript';
 
 export class StudentService {
 	public async create(createStudent: CreateStudentDto): Promise<ResponseApi> {
@@ -41,8 +41,8 @@ export class StudentService {
 			}
 		}
 
-		const bcrypt = new Bcrypt()
-		const passwordHash = await bcrypt.generateHash(password)
+		const bcrypt = new Bcrypt();
+		const passwordHash = await bcrypt.generateHash(password);
 
 		const studentsCreated = await prisma.student.create({
 			data: {
@@ -69,7 +69,6 @@ export class StudentService {
 			where: {
 				...(name && { name: { contains: name, mode: 'insensitive' } }),
 				...(cpf && { cpf: { contains: cpf } }),
-				
 			},
 		});
 
@@ -81,7 +80,19 @@ export class StudentService {
 		};
 	}
 
-	public async findOneById(id: string): Promise<ResponseApi> {
+	public async findOneById(
+		id: string,
+		studentId: string
+	): Promise<ResponseApi> {
+		if (id !== studentId) {
+			return {
+				success: false,
+				code: 403,
+				message:
+					'Acesso negado: você não tem permissão para acessar este estudante.',
+			};
+		}
+
 		const student = await prisma.student.findUnique({
 			where: { id },
 			include: { assessments: true },
@@ -103,18 +114,33 @@ export class StudentService {
 		};
 	}
 
-	public async update(id: string, updateStudentDto: updateStudentDto): Promise<ResponseApi> {
-		const student = await prisma.student.findUnique({
+	public async update(
+		id: string,
+		studentId: string,
+		updateStudentDto: updateStudentDto
+	): Promise<ResponseApi> {
+		if (id !== studentId) {
+			return {
+				success: false,
+				code: 403,
+				message:
+					'Acesso negado: você não tem permissão para atualizar este estudante.',
+			};
+		}
+
+		const studentFound = await prisma.student.findUnique({
 			where: { id },
 		});
 
-		if (!student) {
+		if (!studentFound) {
 			return {
 				success: false,
 				code: 404,
 				message: 'Estudante não encontrado !',
 			};
 		}
+
+		console.log('Dados para atualização:', updateStudentDto);
 
 		const studentUpdated = await prisma.student.update({
 			where: { id },
@@ -129,7 +155,17 @@ export class StudentService {
 		};
 	}
 
-	public async remove(id: string): Promise<ResponseApi> {
+	public async remove(id: string, studentId: string): Promise<ResponseApi> {
+
+		if (id !== studentId) {
+			return {
+				success: false,
+				code: 403,
+				message:
+					'Acesso negado: você não tem permissão para deletar este estudante.',
+			};
+		}
+
 		const student = await prisma.student.findUnique({
 			where: { id },
 		});

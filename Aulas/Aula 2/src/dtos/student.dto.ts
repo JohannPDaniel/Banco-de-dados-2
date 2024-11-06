@@ -23,7 +23,7 @@ export interface updateStudentDto {
 	name?: string;
 	password?: string;
 	type?: StudentType;
-	age?: number;
+	age?: number | null;
 }
 
 export interface Assessments {

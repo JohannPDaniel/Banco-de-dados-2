@@ -32,9 +32,9 @@ export class StudentController {
 	public static async findAll(req: Request, res: Response): Promise<void> {
 		try {
 			const { name, cpf } = req.query;
-			const { student } = req.body;
+			// const { student } = req.body;
 
-			console.log('Student no controller:', student);
+			// console.log('Student no controller:', student);
 
 			const service = new StudentService();
 			const result = await service.findAll({
@@ -56,9 +56,10 @@ export class StudentController {
 	public static async findOneById(req: Request, res: Response): Promise<void> {
 		try {
 			const { id } = req.params;
+			const { student } = req.body as { student: { id: string; type: string } };
 
 			const service = new StudentService();
-			const result = await service.findOneById(id);
+			const result = await service.findOneById(id, student.id);
 
 			const { code, ...response } = result;
 
@@ -74,10 +75,16 @@ export class StudentController {
 	public static async update(req: Request, res: Response): Promise<void> {
 		try {
 			const { id } = req.params;
+			const { student } = req.body as { student: { id: string; type: string } };
 			const { name, password, type, age } = req.body;
 
 			const service = new StudentService();
-			const result = await service.update(id, { name, password, type, age });
+			const result = await service.update(id, student.id, {
+				name,
+				password,
+				type,
+				age,
+			});
 
 			const { code, ...response } = result;
 
@@ -93,9 +100,10 @@ export class StudentController {
 	public static async remove(req: Request, res: Response): Promise<void> {
 		try {
 			const { id } = req.params;
+			const { student } = req.body as { student: { id: string; type: string } };
 
 			const service = new StudentService();
-			const result = await service.remove(id);
+			const result = await service.remove(id, student.id);
 
 			const { code, ...response } = result;
 
