@@ -69,6 +69,7 @@ export class StudentService {
 			where: {
 				...(name && { name: { contains: name, mode: 'insensitive' } }),
 				...(cpf && { cpf: { contains: cpf } }),
+				
 			},
 		});
 

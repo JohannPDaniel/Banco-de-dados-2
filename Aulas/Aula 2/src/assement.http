@@ -1,17 +1,55 @@
 POST http://localhost:3030/assessments HTTP/1.1
 Content-Type: application/json
+Authorization: 32bf4a18-9bb8-40d1-93f3-8f78d2e23e1c
 
 {
-    "title": "Titulo 1",
-    "grade": 8.5,
-    "studentId": "95f0bb58-3a60-488e-b7d0-f4e084dd8781"
+    "title": "Titulo 3",
+    "grade": 5.5,
+    "studentId": "5306e33d-1e9f-47a0-bdac-7e680b091e98"
 }
 
 HTTP/1.1 201  - Created
 x-powered-by: Express
 access-control-allow-origin: *
 content-type: application/json; charset=utf-8
-content-length: 295
-etag: W/"127-ntIEOmHd811gBK5lN7+AvbW6lBs"
-date: Wed, 30 Oct 2024 23:13:33 GMT
+content-length: 166
+etag: W/"a6-7o4TKYiIqMagV0nmDEUAajY8MCM"
+date: Wed, 06 Nov 2024 19:43:34 GMT
+connection: close
+###
+GET http://localhost:3030/assessments?page=1&take=1 HTTP/1.1
+Authorization: 32bf4a18-9bb8-40d1-93f3-8f78d2e23e1c
+
+HTTP/1.1 200  - OK
+x-powered-by: Express
+access-control-allow-origin: *
+content-type: application/json; charset=utf-8
+content-length: 173
+etag: W/"ad-vy24YBiKd7/4WcyAfB234gdzVhU"
+date: Wed, 06 Nov 2024 19:44:07 GMT
+connection: close
+###
+GET http://localhost:3030/assessments/cc95c191-5864-436a-b7c9-ab33763e4d3c HTTP/1.1
+Authorization: 32bf4a18-9bb8-40d1-93f3-8f78d2e23e1c
+###
+PUT http://localhost:3030/assessments/cc95c191-5864-436a-b7c9-ab33763e4d3c HTTP/1.1
+Content-Type: application/json
+Authorization: 32bf4a18-9bb8-40d1-93f3-8f78d2e23e1c
+
+{
+    "title": "Prova de Matemática",
+    "grade": 8.6
+}
+###
+DELETE http://localhost:3030/assessments/cc95c191-5864-436a-b7c9-ab33763e4d3c HTTP/1.1
+Authorization: 32bf4a18-9bb8-40d1-93f3-8f78d2e23e1c
+
+
+HTTP/1.1 200  - OK
+x-powered-by: Express
+access-control-allow-origin: *
+content-type: application/json; charset=utf-8
+content-length: 180
+etag: W/"b4-LhDqG57sf81MWXZiOH4JtAlHaFg"
+date: Wed, 06 Nov 2024 19:18:55 GMT
 connection: close

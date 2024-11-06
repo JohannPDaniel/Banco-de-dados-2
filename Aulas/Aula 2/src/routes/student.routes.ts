@@ -1,10 +1,10 @@
-import { CreateStudentsMiddleware } from '../middlewares/students/createStudents.middleware';
 import { Router } from 'express';
-import { FindAllStudentMiddleware } from '../middlewares/students/find-all-student.middleware';
 import { StudentController } from '../controllers/student.controller';
-import { ValidateUuidMiddleware } from '../middlewares/validate-uuid.middleware';
-import { UpdateStudentMiddleware } from '../middlewares/students/update-students.middleware';
 import { AuthMiddleware } from '../middlewares/auth/auth.middleware';
+import { CreateStudentsMiddleware } from '../middlewares/students/createStudents.middleware';
+import { FindAllStudentMiddleware } from '../middlewares/students/find-all-student.middleware';
+import { UpdateStudentMiddleware } from '../middlewares/students/update-students.middleware';
+import { ValidateUuidMiddleware } from '../middlewares/validate-uuid.middleware';
 
 export class StudentRoutes {
 	public static execute(): Router {
@@ -27,13 +27,14 @@ export class StudentRoutes {
 
 		router.get(
 			'/students/:id',
-			ValidateUuidMiddleware.validate,
+			[AuthMiddleware.validate, ValidateUuidMiddleware.validate],
 			StudentController.findOneById
 		);
 
 		router.put(
 			'/students/:id',
 			[
+				AuthMiddleware.validate,
 				ValidateUuidMiddleware.validate,
 				UpdateStudentMiddleware.validateTypes,
 				UpdateStudentMiddleware.validateData,
@@ -43,7 +44,7 @@ export class StudentRoutes {
 
 		router.delete(
 			'/students/:id',
-			ValidateUuidMiddleware.validate,
+			[AuthMiddleware.validate, ValidateUuidMiddleware.validate],
 			StudentController.remove
 		);
 

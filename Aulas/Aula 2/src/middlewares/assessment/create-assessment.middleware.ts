@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 
-export class AssessmentMiddleware {
+export class CreateAssessmentMiddleware {
 	public static validateRequired(
 		req: Request,
 		res: Response,
@@ -80,7 +80,7 @@ export class AssessmentMiddleware {
 		res: Response,
 		next: NextFunction
 	): void {
-		const { title, description, grade, studentId } = req.body;
+		const { title, description, studentId } = req.body;
 		const regexUuid =
 			/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
 
@@ -100,18 +100,10 @@ export class AssessmentMiddleware {
 			return;
 		}
 
-		if (title.length < 3) {
-			res.status(400).json({
-				success: false,
-				message: 'O titulo deve ter pelo menos 3 caracteres !',
-			});
-			return;
-		}
-
 		if (!regexUuid.test(studentId)) {
 			res.status(400).json({
 				success: false,
-				message: 'Identificador precisa ser um UUID !',
+				message: 'Identificador studentId precisa ser um UUID !',
 			});
 			return;
 		}
