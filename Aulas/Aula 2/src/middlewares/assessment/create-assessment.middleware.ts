@@ -6,7 +6,8 @@ export class CreateAssessmentMiddleware {
 		res: Response,
 		next: NextFunction
 	): void {
-		const { title, grade, studentId } = req.body;
+		const { title, grade } = req.body;
+		const studentId = req.headers['x-student-id'];
 
 		if (!title) {
 			res.status(400).json({
@@ -39,7 +40,8 @@ export class CreateAssessmentMiddleware {
 		res: Response,
 		next: NextFunction
 	): void {
-		const { title, description, grade, studentId } = req.body;
+		const { title, description, grade } = req.body;
+		const studentId = req.headers['x-student-id'];
 
 		if (typeof title !== 'string') {
 			res.status(400).json({
@@ -65,14 +67,6 @@ export class CreateAssessmentMiddleware {
 			return;
 		}
 
-		if (typeof studentId !== 'string') {
-			res.status(400).json({
-				success: false,
-				message: 'studentId é uma string !',
-			});
-			return;
-		}
-
 		next();
 	}
 	public static validateData(
@@ -80,7 +74,9 @@ export class CreateAssessmentMiddleware {
 		res: Response,
 		next: NextFunction
 	): void {
-		const { title, description, studentId } = req.body;
+		const { title, description } = req.body;
+		const studentId = req.headers['x-student-id']
+
 		const regexUuid =
 			/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
 
@@ -100,10 +96,10 @@ export class CreateAssessmentMiddleware {
 			return;
 		}
 
-		if (!regexUuid.test(studentId)) {
+		if (typeof studentId !== 'string' || !regexUuid.test(studentId)) {
 			res.status(400).json({
 				success: false,
-				message: 'Identificador studentId precisa ser um UUID !',
+				message: 'Identificador studentId precisa ser um UUID!',
 			});
 			return;
 		}

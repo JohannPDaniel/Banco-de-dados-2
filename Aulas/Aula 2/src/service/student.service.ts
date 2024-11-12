@@ -26,7 +26,7 @@ export class StudentService {
 		if (student) {
 			if (student.email === email) {
 				return {
-					success: true,
+					success: false,
 					code: 409,
 					message: 'Email já está em uso !!!',
 				};
@@ -34,7 +34,7 @@ export class StudentService {
 
 			if (student.cpf === cpf) {
 				return {
-					success: true,
+					success: false,
 					code: 409,
 					message: 'Cpf já está em uso !!!',
 				};

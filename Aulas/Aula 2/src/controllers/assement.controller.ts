@@ -5,7 +5,8 @@ import { AssessmentService } from '../service/assement.service';
 export class AssessmentController {
 	public static async create(req: Request, res: Response): Promise<void> {
 		try {
-			const { title, description, grade, studentId, student } = req.body;
+			const { title, description, grade, student } = req.body;
+			const studentId = req.headers['x-student-id'] as string;
 
 			const data: CreateAssessmentDto = {
 				title,
@@ -30,7 +31,7 @@ export class AssessmentController {
 	public static async findAll(req: Request, res: Response): Promise<void> {
 		try {
 			const { student } = req.body as { student: { id: string; type: string } };
-			const { page, take } = req.query; 
+			const { page, take } = req.query;
 
 			const service = new AssessmentService();
 			const result = await service.findAll(student.id, {
