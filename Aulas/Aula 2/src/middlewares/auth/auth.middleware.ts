@@ -30,7 +30,9 @@ export class AuthMiddleware {
 
         req.body.student = {
 			id: isValidStudent.id,
-			type: isValidStudent.type
+			type: isValidStudent.type,
+			name: isValidStudent.name,
+			email: isValidStudent.email
 		}
 
 		next();
