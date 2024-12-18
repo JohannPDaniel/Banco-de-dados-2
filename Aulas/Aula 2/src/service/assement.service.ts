@@ -155,6 +155,7 @@ export class AssessmentService {
 			title: assessment.title,
 			description: assessment.description,
 			grade: assessment.grade,
+			createdAt: assessment.createdAt,
 		};
 	}
 }
